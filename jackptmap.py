@@ -1,11 +1,8 @@
 
 # %%
-# Only import necessary libraries once
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-# Updated function to visualize the grid with highlighted numbers
 
 
 def extract_winning_numbers(file_path, num_records=10):
@@ -134,9 +131,6 @@ def plot_histogram(winning_numbers_data, size=(10, 6)):
     plt.tight_layout()
     plt.show()
 
-# Placeholder for the remaining steps
-# The subsequent steps will be implemented in the following code cells
-
 
 def calculate_statistics(winning_numbers_data):
     # Flatten the data to a 1D array
@@ -199,9 +193,6 @@ def calculate_heatmap_data(winning_numbers_data):
             heatmap_data[y, x] += 1
     return heatmap_data
 
-# Placeholder for the remaining steps
-# The subsequent steps will be implemented in the following code cells
-
 
 def visualize_heatmap_configurable(heatmap_data=None, size=(12, 12), colormap='magma', annotate=True):
     fig, ax = plt.subplots(figsize=size)
@@ -244,11 +235,9 @@ winning_numbers_data = extract_winning_numbers("MarkSix.csv", 30)
 visualize_number_grid_updated(winning_numbers_data)
 visualize_number_grid_updated(winning_numbers_data)
 heatmap_data = calculate_heatmap_data(winning_numbers_data)
-visualize_heatmap_configurable(heatmap_data, colormap='hot', annotate=True)
+visualize_heatmap_configurable(heatmap_data, colormap='plasma', annotate=True)
 plot_histogram(winning_numbers_data)
 mean_val, median_val, mode_val = calculate_statistics(winning_numbers_data)
 print("Mean:", mean_val)
 print("Median:", median_val)
 print("Mode:", mode_val)
-
-# %%
