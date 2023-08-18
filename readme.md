@@ -2,6 +2,7 @@
 
 This repository provides mark6 history heatmap information, you can download latest mark6 history @ https://en.lottolyzer.com/history/hong-kong/mark-six
 
+![example](output.png)
 ## Prerequisites
 
 Ensure you have the following libraries installed:
