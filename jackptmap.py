@@ -21,7 +21,7 @@ def extract_winning_numbers(file_path, num_records=10):
 
     # Extract the desired columns and limit the number of records
     extracted_data = df[['Winning Number 1', '2',
-                        '3', '4', '5', '6']].head(num_records)
+                        '3', '4', '5', '6', 'Extra Number ']].head(num_records)
 
     return extracted_data
 
@@ -231,13 +231,106 @@ def visualize_heatmap_configurable(heatmap_data=None, size=(12, 12), colormap='m
     plt.show()
 
 
-winning_numbers_data = extract_winning_numbers("MarkSix.csv", 30)
-visualize_number_grid_updated(winning_numbers_data)
-visualize_number_grid_updated(winning_numbers_data)
-heatmap_data = calculate_heatmap_data(winning_numbers_data)
-visualize_heatmap_configurable(heatmap_data, colormap='plasma', annotate=True)
-plot_histogram(winning_numbers_data)
-mean_val, median_val, mode_val = calculate_statistics(winning_numbers_data)
-print("Mean:", mean_val)
-print("Median:", median_val)
-print("Mode:", mode_val)
+def visualize_heatmap_with_highlights(file_path):
+    df = pd.read_csv(file_path)
+    winning_numbers_data = df[['Winning Number 1',
+                               '2', '3', '4', '5', '6', 'Extra Number ']]
+
+    # Flatten the data and count occurrences of each number
+    numbers_flat = winning_numbers_data.values.flatten()
+    unique, counts = np.unique(numbers_flat, return_counts=True)
+    numbers_dict = dict(zip(unique, counts))
+
+    # Get the top 10 numbers
+    top_10_numbers = [num[0] for num in sorted(
+        numbers_dict.items(), key=lambda item: item[1], reverse=True)[:7]]
+
+    # Create a 7x7 grid for the heatmap
+    heatmap_data = np.zeros((7, 7), dtype=int)
+    for i in range(7):
+        for j in range(7):
+            number = i * 7 + j + 1
+            heatmap_data[i, j] = numbers_dict.get(number, 0)
+
+    fig, ax = plt.subplots(figsize=(12, 12))
+
+    # Display the heatmap
+    cax = ax.matshow(heatmap_data, cmap='coolwarm')
+
+    # Define the numbers to be displayed
+    numbers = np.arange(1, 50).reshape(7, 7)
+
+    # Highlight the top 10 numbers and display each number in its position
+    for i in range(7):
+        for j in range(7):
+            color = 'red' if numbers[i, j] in top_10_numbers else 'black'
+            ax.text(j, i, str(numbers[i, j]),
+                    ha='center', va='center', color=color)
+
+    cbar = plt.colorbar(cax, ax=ax, pad=0.01, aspect=40)
+    cbar.set_label('Frequency', rotation=270, labelpad=15)
+
+    plt.title("Heatmap of Number Occurrences with Top 10 Highlighted")
+    plt.show()
+
+
+def visualize_heatmap_with_highlights_updated(file_path, top_num=10):
+    df = pd.read_csv(file_path)
+    winning_numbers_data = df[['Winning Number 1',
+                               '2', '3', '4', '5', '6', 'Extra Number ']]
+
+    # Flatten the data and count occurrences of each number
+    numbers_flat = winning_numbers_data.values.flatten()
+    unique, counts = np.unique(numbers_flat, return_counts=True)
+    numbers_dict = dict(zip(unique, counts))
+
+    # Get the top 10 numbers
+    top_10_numbers = [num[0] for num in sorted(
+        numbers_dict.items(), key=lambda item: item[1], reverse=True)[:top_num]]
+
+    # Create a 7x7 grid for the heatmap
+    heatmap_data = np.zeros((7, 7), dtype=int)
+    for i in range(7):
+        for j in range(7):
+            number = i * 7 + j + 1
+            heatmap_data[i, j] = numbers_dict.get(number, 0)
+
+    fig, ax = plt.subplots(figsize=(12, 12))
+
+    # Display the heatmap
+    cax = ax.matshow(heatmap_data, cmap='coolwarm')
+
+    # Define the numbers to be displayed
+    numbers = np.arange(1, 50).reshape(7, 7)
+
+    # Highlight the top 10 numbers, display each number in its position and its count below
+    for i in range(7):
+        for j in range(7):
+            color = 'red' if numbers[i, j] in top_10_numbers else 'black'
+            ax.text(j, i, str(numbers[i, j]), ha='center',
+                    va='center', color=color, fontsize=14)
+            ax.text(
+                j, i+0.25, str(heatmap_data[i, j]), ha='center', va='center', color=color, fontsize=10)
+
+    cbar = plt.colorbar(cax, ax=ax, pad=0.01, aspect=40)
+    cbar.set_label('Frequency', rotation=270, labelpad=15)
+
+    plt.title("Heatmap of Number Occurrences with Top 10 Highlighted")
+    plt.show()
+
+
+# Sample call for the visualization function
+# You'll need to run this line in your local environment
+visualize_heatmap_with_highlights_updated("MarkSix.csv", 7)
+# winning_numbers_data = extract_winning_numbers("MarkSix.csv", 200)
+# visualize_number_grid_updated(winning_numbers_data)
+# visualize_number_grid_updated(winning_numbers_data)
+# heatmap_data = calculate_heatmap_data(winning_numbers_data)
+# visualize_heatmap_configurable(heatmap_data, colormap='plasma', annotate=True)
+# plot_histogram(winning_numbers_data)
+# mean_val, median_val, mode_val = calculate_statistics(winning_numbers_data)
+# print("Mean:", mean_val)
+# print("Median:", median_val)
+# print("Mode:", mode_val)
+
+# %%
